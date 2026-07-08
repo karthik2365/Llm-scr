@@ -196,3 +196,41 @@ torch.manual_seed(123)
 embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
 
 print(embedding_layer.weight)
+
+
+# positional embeddings
+
+vocab_size = 50257
+output_dim = 256
+
+token_embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
+print(token_embedding_layer.weight.shape)  # Should print: torch.Size([50257, 256])
+
+max_length = 4
+dataloader = create_dataloader_v1(
+    raw_text, batch_size=8, max_length=max_length,
+    stride=max_length, shuffle=False
+)
+data_iter = iter(dataloader)
+inputs, targets = next(data_iter)
+
+print("Token IDs:\n", inputs)
+print("\nInputs shape:\n", inputs.shape)
+
+token_embeddings = token_embedding_layer(inputs)
+# print("\nToken Embeddings\n", token_embeddings)  # Should print:
+
+
+context_length = max_length
+positional_embedding_layer = torch.nn.Embedding(context_length, output_dim)
+
+torch.arange(max_length)
+
+print(positional_embedding_layer.weight)  # Should print: torch.Size([4, 256])
+
+pos_embeddings = positional_embedding_layer(torch.arange(max_length))
+
+print(pos_embeddings.shape)  # Should print: torch.Size([4, 256])
+
+input_embeddings = token_embeddings + pos_embeddings
+print(input_embeddings)  # Should print: torch.Size([8, 4, 256])

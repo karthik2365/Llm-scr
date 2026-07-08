@@ -1,0 +1,30 @@
+import os
+import urllib.request
+
+if not os.path.exists("verdict.txt"):
+    url = "https://raw.githubusercontent.com/rasbt/LLMs-from-scratch/refs/heads/main/ch02/01_main-chapter-code/the-verdict.txt"
+    file_path = "verdict.txt"
+    urllib.request.urlretrieve(url, file_path)
+
+with open("verdict.txt", "r") as f:
+    raw_text = f.read()
+
+import re
+
+text = "hello world this is a test"
+
+result = re.split(r'([,.:;?_!"()\']|--)', raw_text)
+
+
+print(len(result))
+
+all_words = sorted(result)
+
+print(all_words)
+
+print(len(all_words))
+
+vocab = {token:integer for integer, token in enumerate(all_words)}
+
+print(vocab)
+
